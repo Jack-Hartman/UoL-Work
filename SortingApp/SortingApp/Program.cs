@@ -12,7 +12,7 @@ namespace SortingApp
         static string[] avaliableArrays = { "net_1_2048", "net_1_256", "net_2_2048", "net_2_256", "net_3_2048", "net_3_256" };
         static int[][] arrays;
         static bool complete = false;
-        static void Main(string[] args)
+        static void Main(string[] args) 
         {
             ReadFiles();
             while (!complete)
@@ -72,9 +72,19 @@ namespace SortingApp
             }
         }
 
+        static void printArray(int[] array)
+        {
+            foreach(int item in array)
+            {
+                Console.Write(item + " ");
+            }
+            Console.WriteLine();
+        }
+
         static void SortArray(int[] array)
         {
 
+            printArray(array);
         }
     }
 }
