@@ -10,7 +10,12 @@ namespace SortingApp
     class Program
     {
         static string[] avaliableArrays = { "net_1_2048", "net_1_256", "net_2_2048", "net_2_256", "net_3_2048", "net_3_256" };
-        static int[][] arrays;
+        static int[] net_1_256;
+        static int[] net_2_256;
+        static int[] net_3_256;
+        static int[] net_1_2048;
+        static int[] net_2_2048;
+        static int[] net_3_2048;
         static bool complete = false;
         static void Main(string[] args) 
         {
@@ -26,22 +31,22 @@ namespace SortingApp
                     switch (userSelection.ToLower())
                     {
                         case "net_1_256":
-                            SortArray(arrays[0]);
+                            SortArray(net_1_256);
                             break;
                         case "net_2_256":
-                            SortArray(arrays[1]);
+                            SortArray(net_2_256);
                             break;
                         case "net_3_256":
-                            SortArray(arrays[2]);
+                            SortArray(net_3_256);
                             break;
                         case "net_1_2048":
-                            SortArray(arrays[3]);
+                            SortArray(net_1_2048);
                             break;
                         case "net_2_2048":
-                            SortArray(arrays[4]);
+                            SortArray(net_2_2048);
                             break;
                         case "net_3_2048":
-                            SortArray(arrays[5]);
+                            SortArray(net_3_2048);
                             break;
                     }
                 }
@@ -56,13 +61,12 @@ namespace SortingApp
         {
             try
             {
-                int[] net_1_256 = Array.ConvertAll(File.ReadAllLines(Directory.GetCurrentDirectory() + "\\Files\\Net_1_256.txt"), s => int.Parse(s));
-                int[] net_2_256 = Array.ConvertAll(File.ReadAllLines(Directory.GetCurrentDirectory() + "\\Files\\Net_2_256.txt"), s => int.Parse(s));
-                int[] net_3_256 = Array.ConvertAll(File.ReadAllLines(Directory.GetCurrentDirectory() + "\\Files\\Net_3_256.txt"), s => int.Parse(s));
-                int[] net_1_2048 = Array.ConvertAll(File.ReadAllLines(Directory.GetCurrentDirectory() + "\\Files\\Net_1_2048.txt"), s => int.Parse(s));
-                int[] net_2_2048 = Array.ConvertAll(File.ReadAllLines(Directory.GetCurrentDirectory() + "\\Files\\Net_2_2048.txt"), s => int.Parse(s));
-                int[] net_3_2048 = Array.ConvertAll(File.ReadAllLines(Directory.GetCurrentDirectory() + "\\Files\\Net_3_2048.txt"), s => int.Parse(s));
-                arrays = new int[][] { net_1_256, net_2_256, net_3_256, net_1_2048, net_2_2048, net_3_2048 };
+                net_1_256 = Array.ConvertAll(File.ReadAllLines(Directory.GetCurrentDirectory() + "\\Files\\Net_1_256.txt"), s => int.Parse(s));
+                net_2_256 = Array.ConvertAll(File.ReadAllLines(Directory.GetCurrentDirectory() + "\\Files\\Net_2_256.txt"), s => int.Parse(s));
+                net_3_256 = Array.ConvertAll(File.ReadAllLines(Directory.GetCurrentDirectory() + "\\Files\\Net_3_256.txt"), s => int.Parse(s));
+                net_1_2048 = Array.ConvertAll(File.ReadAllLines(Directory.GetCurrentDirectory() + "\\Files\\Net_1_2048.txt"), s => int.Parse(s));
+                net_2_2048 = Array.ConvertAll(File.ReadAllLines(Directory.GetCurrentDirectory() + "\\Files\\Net_2_2048.txt"), s => int.Parse(s));
+                net_3_2048 = Array.ConvertAll(File.ReadAllLines(Directory.GetCurrentDirectory() + "\\Files\\Net_3_2048.txt"), s => int.Parse(s));
             }
             catch (Exception e)
             {
@@ -84,7 +88,7 @@ namespace SortingApp
         static void SortArray(int[] array)
         {
 
-            printArray(array);
+            
         }
     }
 }
