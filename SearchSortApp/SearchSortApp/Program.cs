@@ -22,25 +22,46 @@ namespace SearchSortApp
                 if (avaliableArrays.Contains(userSelection.ToLower()))
                 {
                     Console.WriteLine("Selected " + userSelection.ToLower());
-                    int[] selected = arrays[Array.IndexOf(avaliableArrays, userSelection)];
+                    int[] selected = arrays[FindArray(userSelection.ToLower())];
+                    Sort.BubbleSort(selected);
+                    Sort.HeapSortInit(selected);
+                    Sort.InsertionSort(selected);
+                    Sort.MergeSortInit(selected);
+                    Sort.QuickSortInit(selected);
+                    Console.WriteLine("Quick: "+Sort.quickSortIntOuter + ", " + Sort.quickSortIntInner);
+                    Console.WriteLine("Heap: " + Sort.heapSortIntOuter + ", " + Sort.heapSortIntInner);
+                    Console.WriteLine("Bubble: " + Sort.bubbleSortIntOuter + ", " + Sort.bubbleSortIntInner);
+
                 }
-                else
-                {
-                    Console.WriteLine("Not a valid array\n");
-                }
+                else Console.WriteLine("Not a valid array\n");
             }
         }
 
-        public static void PrintArray(int[] array, int n)
+        private static int FindArray(string find)
+        {
+            int inc = 0;
+            foreach(string array in avaliableArrays)
+            {
+                if(find == array) break;
+                inc++;
+            }
+            return inc;
+        }
+
+        public static void PrintArray(int[] array)
         {
             int iterator = 0;
+            int interval = 0;
+            if (array.Length > 2000) interval = 50;
+            else interval = 10;
             foreach (int item in array)
             {
-                if(iterator == n)
+                if(iterator == interval)
                 {
                     Console.Write(item + " ");
+                    iterator = 0;
                 }
-                iterator++;                
+                iterator++;
             }
             Console.WriteLine();
         }
