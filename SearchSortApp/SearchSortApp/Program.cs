@@ -24,7 +24,7 @@ namespace SearchSortApp
                 {
                     Console.WriteLine("Would you like to merge two arrays?\nyes, no"); // Write to console to ask user question
                     string userSelection = Console.ReadLine().ToLower().Trim(); // Gets user input and putting response to lower and trimming
-                    if (userSelection == "no") // If user input is one
+                    if (userSelection == "no") // If user input is no
                     {
                         int[] selectedArray = SelectArray(""); // Get selected array defined as selectedArray by executing SelectArray
                         SortArray(selectedArray); // Execute SortArray and passing selectArray
@@ -32,7 +32,7 @@ namespace SearchSortApp
                         Sort.ResetValues(); // Executes ResetValues void in Sort calss
                         Search.ResetValues(); // Executes ResetValues void in Search class
                     }
-                    else if (userSelection == "yes") // Else if user input is two
+                    else if (userSelection == "yes") // Else if user input is yes
                     {
                         List<int> merged = new List<int>(); // New list int declared as merged
                         merged.AddRange(SelectArray("1: ")); // Add returned value from SelectArray to merged
