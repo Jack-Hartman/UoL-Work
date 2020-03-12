@@ -24,7 +24,6 @@ namespace SearchSortApp
             insertionSortIntOuter = 0;
             mergeSortIntInner = 0;
             mergeSortIntOuter = 0;
-            sortedArray = null;
         }
 
         public static void QuickSortInit (int[] data, bool asc)
@@ -68,15 +67,14 @@ namespace SearchSortApp
             if (i < right) QuickSort(data, i, right, asc);
         }
 
-        //
-        public static void HeapSortInit (int[] heap)
+        public static void HeapSortInit (int[] heap, bool asc)
         {
             int heapSize = heap.Length;
             int i;
             for (i = (heapSize - 1) / 2; i >= 0; i--)
             {
                 heapSortIntOuter++;
-                HeapSort(heap, heapSize, i);
+                HeapSort(heap, heapSize, i, asc);
             }
             for (i = heap.Length - 1; i > 0; i--)
             {
@@ -85,26 +83,36 @@ namespace SearchSortApp
                 heap[0] = temp;
                 heapSize--;
                 heapSortIntOuter++;
-                HeapSort(heap, heapSize, 0);
+                HeapSort(heap, heapSize, 0, asc);
             }
         }
 
-        private static void HeapSort (int[] heap, int heapSize, int index)
+        private static void HeapSort (int[] heap, int heapSize, int index, bool asc)
         {
             int left = (index + 1) * 2 - 1;
             int right = (index + 1) * 2;
             int largest = 0;
             heapSortIntInner++;
-            if (left < heapSize && heap[left] > heap[index]) largest = left;
-            else largest = index;
-            if(right < heapSize && heap[right] > heap[largest]) largest = right;
+            if (asc)
+            {
+                if (left < heapSize && heap[left] > heap[index]) largest = left;
+                else largest = index;
+                if (right < heapSize && heap[right] > heap[largest]) largest = right;
+            }
+            else
+            {
+                if (left < heapSize && heap[left] < heap[index]) largest = left;
+                else largest = index;
+                if (right < heapSize && heap[right] < heap[largest]) largest = right;
+            }
             if(largest != index)
             {
                 int temp = heap[index];
                 heap[index] = heap[largest];
                 heap[largest] = temp;
-                HeapSort(heap, heapSize, largest);
+                HeapSort(heap, heapSize, largest, asc);
             }
+            sortedArray = heap;
             Program.PrintArray(heap);
         }
 
@@ -143,14 +151,13 @@ namespace SearchSortApp
                 Program.PrintArray(data);
             }
         }
-        //
-        public static void MergeSortInit(int[] data)
+        public static void MergeSortInit(int[] data, bool asc)
         {
             int[] temp = new int[data.Length];
-            MergeSortRecursive(data, temp, 0, data.Length - 1);
+            MergeSortRecursive(data, temp, 0, data.Length - 1, asc);
         }
 
-        private static void MergeSortRecursive(int[] data, int[] temp, int low, int high)
+        private static void MergeSortRecursive(int[] data, int[] temp, int low, int high, bool asc)
         {
             int n = high - low + 1;
             int middle = low + n / 2;
@@ -161,12 +168,12 @@ namespace SearchSortApp
             {
                 temp[i] = data[i];
             }
-            MergeSortRecursive(temp, data, low, middle - 1);
-            MergeSortRecursive(data, temp, middle, high);
-            Merge(data, temp, low, middle, high);
+            MergeSortRecursive(temp, data, low, middle - 1, asc);
+            MergeSortRecursive(data, temp, middle, high, asc);
+            Merge(data, temp, low, middle, high, asc);
         }
 
-        private static void Merge (int[] data, int[] temp, int low, int middle, int high)
+        private static void Merge (int[] data, int[] temp, int low, int middle, int high, bool asc)
         {
             int ri = low;
             int ti = low;
@@ -174,13 +181,23 @@ namespace SearchSortApp
             mergeSortIntInner++;
             while(ti < middle && di <= high)
             {
-                if (data[di] < temp[ti]) data[ri++] = data[di++];
-                else data[ri++] = temp[ti++];
+                if (asc)
+                {
+                    if (data[di] < temp[ti]) data[ri++] = data[di++];
+                    else data[ri++] = temp[ti++];
+                }
+                else
+                {
+                    if (data[di] >= temp[ti]) data[ri++] = data[di++];
+                    else data[ri++] = temp[ti++];
+                }
+                
             }
             while (ti < middle)
             {
                 data[ri++] = temp[ti++];
             }
+            sortedArray = data;
             Program.PrintArray(data);
         }
     }

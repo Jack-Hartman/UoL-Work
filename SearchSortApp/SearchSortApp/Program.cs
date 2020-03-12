@@ -9,28 +9,51 @@ namespace SearchSortApp
     {
         public static string[] avaliableArrays = { "net_1_2048", "net_1_256", "net_2_2048", "net_2_256", "net_3_2048", "net_3_256" };
         public static List<int[]> arrays = new List<int[]>();
-        public static bool error = false;
+        private static bool error = false;
+        private static bool asc = false;
 
         static void Main()
         {
             ReadFiles();
             while (!error)
             {
-                int[] selectedArray = SelectArray();
-                SortArray(selectedArray);
-                SearchArray(Sort.sortedArray);
-                Sort.ResetValues();
+                bool selected = false;
+                while (!selected)
+                {
+                    Console.WriteLine("How many arrays would you like to sort?\none, two");
+                    string userSelection = Console.ReadLine().ToLower().Trim();
+                    if (userSelection == "one")
+                    {
+                        int[] selectedArray = SelectArray("");
+                        SortArray(selectedArray);
+                        SearchArray(Sort.sortedArray);
+                        Sort.ResetValues();
+                        Search.ResetValues();
+                    }
+                    else if (userSelection == "two")
+                    {
+                        List<int> merged = new List<int>();
+                        merged.AddRange(SelectArray("1: "));
+                        merged.AddRange(SelectArray("2: "));
+                        SortArray(merged.ToArray());
+                        SearchArray(Sort.sortedArray);
+                        Sort.ResetValues();
+                        Search.ResetValues();
+                    }
+                    else Console.WriteLine("Not a valid action");
+                }
+                
             }
         }
 
-        private static int[] SelectArray()
+        private static int[] SelectArray(string extra)
         {
             bool selected = false;
             int[] selectedArray = null;
             while (!selected)
             {
-                Console.WriteLine("Please select an array to sort");
-                Console.WriteLine(string.Join(", ", avaliableArrays));
+                Console.WriteLine("\n"+extra+"Please select an array to sort");
+                Console.WriteLine(string.Join(", ", avaliableArrays) + ", merge");
                 string userSelection = Console.ReadLine().ToLower().Trim();
                 if (avaliableArrays.Contains(userSelection))
                 {
@@ -58,7 +81,7 @@ namespace SearchSortApp
                         selected = true;
                         break;
                     case "heap":
-                        Sort.HeapSortInit(array);
+                        Sort.HeapSortInit(array, SortType());
                         Console.WriteLine("\nOuter - " + Sort.heapSortIntOuter + "\nInner - " + Sort.heapSortIntInner + "\n");
                         selected = true;
                         break;
@@ -68,7 +91,7 @@ namespace SearchSortApp
                         selected = true;
                         break;
                     case "merge":
-                        Sort.MergeSortInit(array);
+                        Sort.MergeSortInit(array, SortType());
                         Console.WriteLine("\nOuter - " + Sort.mergeSortIntOuter + "\nInner - " + Sort.mergeSortIntInner + "\n");
                         selected = true;
                         break;
@@ -91,11 +114,13 @@ namespace SearchSortApp
                 {
                     type = true;
                     selected = true;
+                    asc = true;
                 }
                 else if (userSelection == "descending")
                 {
                     type = false;
                     selected = true;
+                    asc = false;
                 }
                 else
                 {
@@ -115,11 +140,31 @@ namespace SearchSortApp
                 switch (userSelection)
                 {
                     case "binary":
-                        Console.WriteLine(Search.BinarySearch(SearchItem(), array, array.Last(), array.First()));
+                        int binfind = SearchItem();
+                        List<int> binfound = Search.BinarySearch(binfind, array, 0, array.Length-1, asc);
+                        Console.WriteLine("Search Complete, number of steps taken:" + Search.binaryCount + "\n");
+                        if(array[binfound.ToArray().First()] == binfind)
+                        {
+                            Console.WriteLine("Found at location(s): " + string.Join(", ", binfound));
+                        }
+                        else
+                        {
+                            PrintFindings(array, binfound, binfind);
+                        }
                         selected = true;
                         break;
                     case "interpolation":
-                        Console.WriteLine(Search.BinarySearchRecursive(SearchItem(), array, 0, array.Length));
+                        int intpolfind = SearchItem();
+                        List<int> intpolfound = Search.InterpolationSearch(array, intpolfind, asc);
+                        Console.WriteLine("Search Complete, number of steps taken:" + Search.intpolCount + "\n");
+                        if (array[intpolfound.ToArray().First()] == intpolfind)
+                        {
+                            Console.WriteLine("Found at location(s): " + string.Join(", ", intpolfound));
+                        }
+                        else
+                        {
+                            PrintFindings(array, intpolfound, intpolfind);
+                        }
                         selected = true;
                         break;
                     default:
@@ -159,6 +204,33 @@ namespace SearchSortApp
                 inc++;
             }
             return inc;
+        }
+
+        public static void PrintFindings(int[] array, List<int> found, int find)
+        {
+            if (array[found.ToArray().First()] == find)
+            {
+                Console.WriteLine("Found at location(s): " + string.Join(", ", found));
+            }
+            else
+            {
+                Console.Write("Unable to find value, Nearest values and locations:");
+                int prev = 0;
+                foreach (int item in found)
+                {
+                    if (array[item] != prev)
+                    {
+                        prev = array[item];
+                        Console.Write("\n" + prev + " Found at: " + item);
+                    }
+                    else
+                    {
+                        Console.Write(", " + item);
+                    }
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+            }
         }
 
         public static void PrintArray(int[] array)
