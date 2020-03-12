@@ -22,9 +22,9 @@ namespace SearchSortApp
                 bool selected = false; // Defines selected boolean
                 while (!selected) // While selected is false
                 {
-                    Console.WriteLine("How many arrays would you like to sort?\none, two"); // Write to console to ask user question
+                    Console.WriteLine("Would you like to merge two arrays?\nyes, no"); // Write to console to ask user question
                     string userSelection = Console.ReadLine().ToLower().Trim(); // Gets user input and putting response to lower and trimming
-                    if (userSelection == "one") // If user input is one
+                    if (userSelection == "no") // If user input is one
                     {
                         int[] selectedArray = SelectArray(""); // Get selected array defined as selectedArray by executing SelectArray
                         SortArray(selectedArray); // Execute SortArray and passing selectArray
@@ -32,7 +32,7 @@ namespace SearchSortApp
                         Sort.ResetValues(); // Executes ResetValues void in Sort calss
                         Search.ResetValues(); // Executes ResetValues void in Search class
                     }
-                    else if (userSelection == "two") // Else if user input is two
+                    else if (userSelection == "yes") // Else if user input is two
                     {
                         List<int> merged = new List<int>(); // New list int declared as merged
                         merged.AddRange(SelectArray("1: ")); // Add returned value from SelectArray to merged
@@ -143,14 +143,14 @@ namespace SearchSortApp
                     case "binary": // When userSelection equals 'binary'
                         int binFind = SearchItem(); // Defines binFind int with value returned from SearchItem void
                         List<int> binFound = Search.BinarySearch(binFind, array, 0, array.Length-1, asc); // Defines binFound List integer with returned value from BinarySearch found in Search class
-                        Console.WriteLine("Search Complete, number of steps taken:" + Search.binaryCount + "\n"); // Writes counter for binaryCount
+                        Console.WriteLine("Search Complete, number of steps taken: " + Search.binaryCount + "\n"); // Writes counter for binaryCount
                         PrintFindings(array, binFound, binFind); // Calls PrintFindins array passing array, binFound integer and binFind integer
                         selected = true; // Sets selected bool to true
                         break;
                     case "interpolation": // When userSelection equals 'interpolation'
                         int intpolFind = SearchItem(); // Defines intpolFind int with value returned from SearchItem void
                         List<int> intpolfound = Search.InterpolationSearch(array, intpolFind, asc); // Defines intpolfound List integer with returned value from InterpolationSearch found in Search class
-                        Console.WriteLine("Search Complete, number of steps taken:" + Search.intpolCount + "\n"); // Writes counter for intpolCount
+                        Console.WriteLine("Search Complete, number of steps taken: " + Search.intpolCount + "\n"); // Writes counter for intpolCount
                         PrintFindings(array, intpolfound, intpolFind); // Calls PrintFindins array passing array, intpolfound integer and intpolFind integer
                         selected = true; // Sets selected bool to true
                         break;
@@ -219,7 +219,9 @@ namespace SearchSortApp
                     }
                 }
             }
-            Console.WriteLine(); // WriteLine for spacing
+            // WriteLines for spacing
+            Console.WriteLine();
+            Console.WriteLine();
         }
 
         // PrintArray void requires integer array
