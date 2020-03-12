@@ -7,6 +7,7 @@ namespace SearchSortApp
 {
     class Program
     {
+        // Jack Hartman - 19702197
         public static string[] avaliableArrays = { "net_1_2048", "net_1_256", "net_2_2048", "net_2_256", "net_3_2048", "net_3_256" }; // Array of avaliable files
         public static List<int[]> arrays = new List<int[]>(); // List integer array for files to loaded into
         private static bool error = false; // Error bool
