@@ -5,51 +5,55 @@ namespace SearchSortApp
 {
     class Search
     {
-        public static int binaryCount;
-        public static int intpolCount;
+        public static int binaryCount; // Defines binaryCount
+        public static int intpolCount; // Defines intpolCount
+
+        // ResetValues void
         public static void ResetValues()
         {
-            binaryCount = 0;
-            intpolCount = 0;
+            binaryCount = 0; // Sets binaryCount to 0
+            intpolCount = 0; // Sets intpolCount to 0
         }
 
-        private static List<int> FindNearest(int[] array, int midpoint, int key)
+        // FindNearest List integer requires integer array, midpoint integer, key integer
+        private static List<int> FindNearest(int[] array, int midPoint, int key)
         {
-            List<int> found = new List<int>();
-            int newMid = midpoint;
-            found.Add(midpoint);
-            try
+            List<int> found = new List<int>(); // Defines found as new List integer
+            int newMid = midPoint; // Defines newMid to midPoint
+            found.Add(midPoint); // Adds integer midPoint to found
+            try // Initiates try
             {
-                while (key == array[newMid])
+                while (key == array[newMid]) // While key equals array value of newMid
                 {
-                    newMid = newMid + 1;
-                    if (key == array[newMid])
+                    newMid++; // Increments newMid by 1
+                    if (key == array[newMid]) // If key == array value of newMid
                     {
-                        found.Add(newMid);
+                        found.Add(newMid); // Adds integer midPoint to found
                     }
                 }
             }
-            catch { };
-            newMid = midpoint;
-            try
+            catch { }; // Catches errors
+            newMid = midPoint; // Sets newMid to midPoint
+            try // Initiates try
             {
-                while (key == array[newMid])
+                while (key == array[newMid]) // While key equals array value of newMid
                 {
-                    newMid = newMid - 1;
-                    if (key == array[newMid])
+                    newMid --; // Decrements newMid by 1
+                    if (key == array[newMid]) // If key == array value of newMid
                     {
-                        found.Add(newMid);
+                        found.Add(newMid); // Adds integer midPoint to found
                     }
                 }
             }
-            catch { };
-            return found;
+            catch { }; // Catches errors
+            return found; // Returns found list
         }
 
+        // FindClosest List integer requires integer array, left integer, right integer
         private static List<int> FindClosest(int[] array, int left, int right)
         {
-            List<int> found = new List<int>();
-            if(left != -1 && left <= array.Length - 1) found.AddRange(FindNearest(array, left, array[left]));
+            List<int> found = new List<int>(); // Defines found as new List integer
+            if (left != -1 && left <= array.Length - 1) found.AddRange(FindNearest(array, left, array[left]));
             if(right != -1 && right <= array.Length - 1) found.AddRange(FindNearest(array, right, array[right]));
             return found;
         }
