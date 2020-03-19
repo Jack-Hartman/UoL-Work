@@ -11,19 +11,21 @@ namespace GitApp
     {
         static bool error = false;
         static List<string> names = new List<string>();
+        static List<string> storedFiles = new List<string>();
         static void Main(string[] args)
         {
             GetFiles();
             Console.WriteLine("Please input your command, use 'help' for more info");
             while (!error)
             {
+                Console.Write("> ");
                 string response = Console.ReadLine().Trim().ToLower();
                 string[] command = response.Split(' ');
                 string input = command.First();
                 switch (input)
                 {
                     case "help":
-                        Console.WriteLine("Commands:\nrefresh (refreshes avaliable files)\ndiff [a.txt] [b.txt] (compares two files)\nloaded (displays loaded files)\n");
+                        Console.WriteLine("Commands:\nrefresh (refreshes avaliable files)\ndiff [a.txt] [b.txt] (compares two files)\nls (displays loaded files)\n");
                         break;
                     case "refresh":
                         GetFiles();
@@ -35,11 +37,20 @@ namespace GitApp
                         Console.WriteLine();
                         break;
                     case "diff":
-                        string[] files = command.Skip(1).ToArray();
-                        if (names.Contains(files[0]) && names.Contains(files[1])) Compare(files[0], files[1]);
-                        else Console.WriteLine("You have inputted a unrecognised file please try again\n");
+                        string[] selected = command.Skip(1).ToArray();
+                        if (selected.Length == 2)
+                        {
+                            if (names.Contains(selected[0]) && names.Contains(selected[1]))
+                            {
+                                bool comparison = Compare(selected[0], selected[1]);
+                                if (comparison) Console.WriteLine($"{selected[0]} and {selected[1]} are not different", ConsoleColor.Green);
+                                else Console.WriteLine($"", ConsoleColor.Red);
+                            }
+                            else Console.WriteLine("You have inputted an unrecognised file please try again\n");
+                        }
+                        else Console.WriteLine("You haven't inputted the correct amount of arguments\n");
                         break;
-                    case "loaded":
+                    case "ls":
                         Console.WriteLine("Loaded files:");
                         foreach (string name in names)
                         {
@@ -52,21 +63,26 @@ namespace GitApp
                         break;
                 }
             }
+            Console.WriteLine("Press any key to exit");
+            Console.ReadKey(true);
         }
 
-        private static void Compare(string file1, string file2)
+        private static bool Compare(string file1, string file2)
         {
-
+            if (String.Equals(file1, file2)) return true;
+            else return false;
         }
 
         private static void GetFiles()
         {
             names.Clear();
+            storedFiles.Clear();
             try {
                 string[] files = Directory.GetFiles(Environment.CurrentDirectory + @"/Files");
                 foreach (string file in files)
                 {
                     names.Add(Path.GetFileName(file));
+                    storedFiles.Add(File.ReadAllText(file));
                 }
             }
             catch(Exception e)
