@@ -43,10 +43,19 @@ namespace GitApp
                             if (names.Contains(selected[0]) && names.Contains(selected[1]))
                             {
                                 bool comparison = Compare(selected[0], selected[1]);
-                                if (comparison) Console.WriteLine($"{selected[0]} and {selected[1]} are not different", ConsoleColor.Green);
-                                else Console.WriteLine($"", ConsoleColor.Red);
+                                if (comparison)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.WriteLine($"{selected[0]} and {selected[1]} are not different\n");
+                                }
+                                else
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine($"{selected[0]} and {selected[1]} are different\n");
+                                }
                             }
                             else Console.WriteLine("You have inputted an unrecognised file please try again\n");
+                            Console.ForegroundColor = ConsoleColor.Gray;
                         }
                         else Console.WriteLine("You haven't inputted the correct amount of arguments\n");
                         break;
@@ -67,8 +76,10 @@ namespace GitApp
             Console.ReadKey(true);
         }
 
-        private static bool Compare(string file1, string file2)
+        private static bool Compare(string fileName1, string fileName2)
         {
+            string file1 = storedFiles[names.FindIndex(x => x == fileName1)];
+            string file2 = storedFiles[names.FindIndex(x => x == fileName2)];
             if (String.Equals(file1, file2)) return true;
             else return false;
         }
@@ -81,7 +92,7 @@ namespace GitApp
                 string[] files = Directory.GetFiles(Environment.CurrentDirectory + @"/Files");
                 foreach (string file in files)
                 {
-                    names.Add(Path.GetFileName(file));
+                    names.Add(Path.GetFileName(file).ToLower());
                     storedFiles.Add(File.ReadAllText(file));
                 }
             }
