@@ -9,13 +9,13 @@ namespace GitApp
 {
     class Program
     {
-        static bool error = false;
-        static List<string> names = new List<string>();
-        static List<string> storedFiles = new List<string>();
-        static void Main(string[] args)
+        static bool error = false; // static bool for if there is an error
+        static List<string> names = new List<string>(); // static string list for all the names of the files
+        static List<string> storedFiles = new List<string>(); // static string list of the directorys of the files found
+        static void Main(string[] args) // main static void
         {
-            GetFiles();
-            Console.WriteLine("Please input your command, use 'help' for more info");
+            GetFiles(); // calls the GetFiles void
+            Console.WriteLine("Please input your command, use 'help' for more info"); // 
             while (!error)
             {
                 Console.Write("> ");
