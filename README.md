@@ -1,2 +1,2 @@
 # UoL-VS-Work
-University of Lincoln Visual Studio Work
+University of Lincoln Work
