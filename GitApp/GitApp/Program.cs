@@ -9,98 +9,45 @@ namespace GitApp
 {
     class Program
     {
-        static bool error = false; // static bool for if there is an error
-        static List<string> names = new List<string>(); // static string list for all the names of the files
-        static List<string> storedFiles = new List<string>(); // static string list of the directorys of the files found
-        static void Main(string[] args) // main static void
+        // Main static void
+        static void Main(string[] args) 
         {
-            GetFiles(); // calls the GetFiles void
-            Console.WriteLine("Please input your command, use 'help' for more info"); // 
-            while (!error)
+            Files files = new Files(); // Instantiates files class as an object
+            files.GetFiles(); // Calls the GetFiles inside of files
+            Console.WriteLine("Please input your command, use 'help' for more info"); // Writes help message to console
+            while (!files.error) // While files.error equals false
             {
-                Console.Write("> ");
-                string response = Console.ReadLine().Trim().ToLower();
-                string[] command = response.Split(' ');
-                string input = command.First();
-                switch (input)
+                Console.Write("> "); // Writes input prompt to console
+                string response = Console.ReadLine().Trim().ToLower(); // Gets response and trims it and makes it all lower case
+                string[] command = response.Split(' '); // Splits the response into an array
+                string input = command.First(); // Gets the first value the array
+                switch (input) // Creates a switch for input
                 {
-                    case "help":
-                        Console.WriteLine("Commands:\nrefresh (refreshes avaliable files)\ndiff [a.txt] [b.txt] (compares two files)\nls (displays loaded files)\n");
+                    case "help": // If input equals help
+                        Console.WriteLine("Commands:\nrefresh (refreshes avaliable files)\ndiff [a.txt] [b.txt] (compares two files)\nls (displays loaded files)\n"); // Displays help text
+                        break; 
+                    case "refresh": // If input equals refresh
+                        files.GetFiles(); // Calls GetFiles void in files
+                        files.ListFiles();    // Calls ListFiles void in files                   
                         break;
-                    case "refresh":
-                        GetFiles();
-                        Console.WriteLine("Refreshed - Loaded files:");
-                        foreach (string name in names)
+                    case "diff": // If input equals diff
+                        string[] selected = command.Skip(1).ToArray(); // Crates a new array called selected from command but skipping the first value
+                        if (selected.Length == 2) // Checks to see if selected length equals 2
                         {
-                            Console.WriteLine(name);
+                            files.Compare(selected[0], selected[1]); // Calls Compare in files with selected[0] and selected[1]
                         }
-                        Console.WriteLine();
+                        else Console.WriteLine("You haven't inputted the correct amount of arguments\n"); // Displays error message to user
                         break;
-                    case "diff":
-                        string[] selected = command.Skip(1).ToArray();
-                        if (selected.Length == 2)
-                        {
-                            if (names.Contains(selected[0]) && names.Contains(selected[1]))
-                            {
-                                bool comparison = Compare(selected[0], selected[1]);
-                                if (comparison)
-                                {
-                                    Console.ForegroundColor = ConsoleColor.Green;
-                                    Console.WriteLine($"{selected[0]} and {selected[1]} are not different\n");
-                                }
-                                else
-                                {
-                                    Console.ForegroundColor = ConsoleColor.Red;
-                                    Console.WriteLine($"{selected[0]} and {selected[1]} are different\n");
-                                }
-                            }
-                            else Console.WriteLine("You have inputted an unrecognised file please try again\n");
-                            Console.ForegroundColor = ConsoleColor.Gray;
-                        }
-                        else Console.WriteLine("You haven't inputted the correct amount of arguments\n");
+                    case "ls": // If input equals ls
+                        files.ListFiles(); // Calls ListFiles void in files
                         break;
-                    case "ls":
-                        Console.WriteLine("Loaded files:");
-                        foreach (string name in names)
-                        {
-                            Console.WriteLine(name);
-                        }
-                        Console.WriteLine();
-                        break;
-                    default:
-                        Console.WriteLine("Command not found, please use 'help' command\n");
+                    default: // If nothing is found
+                        Console.WriteLine("Command not found, please use 'help' command\n"); // Displays error message to user
                         break;
                 }
             }
-            Console.WriteLine("Press any key to exit");
-            Console.ReadKey(true);
-        }
-
-        private static bool Compare(string fileName1, string fileName2)
-        {
-            string file1 = storedFiles[names.FindIndex(x => x == fileName1)];
-            string file2 = storedFiles[names.FindIndex(x => x == fileName2)];
-            if (String.Equals(file1, file2)) return true;
-            else return false;
-        }
-
-        private static void GetFiles()
-        {
-            names.Clear();
-            storedFiles.Clear();
-            try {
-                string[] files = Directory.GetFiles(Environment.CurrentDirectory + @"/Files");
-                foreach (string file in files)
-                {
-                    names.Add(Path.GetFileName(file).ToLower());
-                    storedFiles.Add(File.ReadAllText(file));
-                }
-            }
-            catch(Exception e)
-            {
-                error = true;
-                Console.WriteLine("An error has occured while readiing files:\n" + e);
-            }
+            Console.WriteLine("Press any key to exit"); // Displays message to user
+            Console.ReadKey(true); // Waits for any key input
         }
     }
 }
