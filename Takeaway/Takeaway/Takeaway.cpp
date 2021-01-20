@@ -38,7 +38,7 @@ int main()
 	// Create an order object
 	Order order = Order();
 
-	cout << "Welcome! Type 'help' to get started\n";
+	cout << "Welcome! Type 'help' to get started\n"; // welcome message
 	while (userCommand != "exit")
 	{
 		getline(cin, userCommand);
@@ -58,50 +58,67 @@ int main()
 			parameters.erase(parameters.begin()); // Remove command from parameters
 
 			if (command.compare("menu") == 0) {
+				// Check for sorting method
 				string sort;
 				if (parameters.size() > 0) {
 					if (parameters[0] == "asc" || parameters[0] == "desc") sort = parameters[0];
+					else sort = "invalid";
 				}
-				else sort = "asc";
-				if (sort != "") cout << menu.toString(sort);
-				else cout << "Sorting order not recognised, please try again.\n";
+				if (sort != "invalid") cout << menu.toString(sort); // call menu to string and output to console
+				else cout << "Sorting order not recognised, please try again.\n"; // Error for unrecognised sorting format
 			}
 			else if (command.compare("add") == 0)
 			{
+				// Check if parameters are over one and call order.add() with menu and parameters which are the item locations in the order items vector
 				if (parameters.size() > 0) order.add(parameters, menu);
 				else cout << "No item added to command\n";
 			}
 			else if (command.compare("remove") == 0)
 			{
+				// Check if parameters are over one and call order.remove() with parameters which are the item locations in the order items vector
 				if (parameters.size() > 0) order.remove(parameters);
 				else cout << "No item added to command\n";
 			}
 			else if (command.compare("checkout") == 0)
 			{
-				cout << order.toString();
-				bool complete = false;
-				while (!complete) {
-					cout << "\n\nDo you want to place your order? \nType'y', or 'n' to go back and modify it.\n";
-					string resp; getline(cin, resp);
-					if (resp == "y") {
-						order.printReceipt();
-						cout << "Order complete!\nReciept has been put into receipt.txt\n";
-						userCommand = "exit";
-						complete = true;
+				// get order toString and see if it contains anything other than blank
+				string checkout = order.toString("Checkout");
+				if (checkout != "") {
+					cout << checkout; // display checkout
+					bool complete = false;
+					while (!complete) { // Set while loop till one of the two expected answers is returned
+						cout << "\n\nDo you want to place your order? \nType 'y', or 'n' to go back and modify it.\n"; 
+						string resp; getline(cin, resp);
+						if (resp == "y") {
+							order.printReceipt(); // Prints reciept
+							cout << "Order complete!\nReciept has been put into receipt.txt\n";
+							userCommand = "exit"; // Set exit command to end while loop
+							complete = true;
+						}
+						else if (resp == "n") {  
+							cout << "Checkout Cancelled\n\n";
+							complete = true;
+						}
+						else cout << "Response not recognised, please try again.\n";
 					}
-					else if (resp == "n") {
-						cout << "Checkout Cancelled\n\n";
-						complete = true;
-					}
-					else cout << "Response not recognised, please try again.";
 				}
+				else cout << "No items in basket to checkout\n"; // Let the user know there isn't anything in the basket
 			}
 			else if (command.compare("help") == 0)
 			{
-				cout << "\nHelp:\nmenu - displays the menu\nadd [index] - adds item to order using number from menu e.g. add 1 3 2\nremove [index] - removes an item from order using number from menu e.g. remove 1 3 2\ncheckout - begins checkout of current order\nhelp - this menu of commands\nexit - terminates the program gracefully\n\n";
+				// Display help menu
+				cout << "\nHelp:\nmenu [asc/desc | (optional)] - displays the menu\nbasket - view current items in order\nadd [index] - adds item to order using number from menu e.g. add 1 3 2\nremove [index] - removes an item from order using number from menu e.g. remove 1 3 2\ncheckout - begins checkout of current order\nhelp - this menu of commands\nexit - terminates the program gracefully\n\n";
 			}
+			else if (command.compare("basket") == 0) {
+				// Display checkout layout without catch for input 
+				string checkout = order.toString("Basket");
+				if (checkout != "") cout << checkout + order.calculateTotal();
+				else cout << "There are no items in the basket\n";
+			}
+			else if (command.compare("exit") == 0) cout << "Closing...\n"; 
 			else
 			{
+				// If nothing is inputted display response
 				cout << "Command not found, type 'help' for more info\n";
 			}
 		}
@@ -113,7 +130,9 @@ int main()
 		parameters.clear();
 
 	}
-
+	//Destructors called and close program
+	menu.~Menu();
+	order.~Order();
 	cout << "Press any key to quit...";
 	std::getchar();
 }

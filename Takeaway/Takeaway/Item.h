@@ -4,6 +4,7 @@
 
 using namespace std;
 
+// Define abstract class item
 class Item {
 	friend class Order;
 	friend class Menu;
@@ -14,12 +15,14 @@ class Item {
 
 	public:
 		virtual string toString() {
+			// returns item formated for menu with price set to 2 d.p
 			char pricew[8];
 			sprintf(pricew, "%.2f", price);
 			return name + ": £" + pricew + ", " + calories + " cal";
 		}
 };
 
+// Define Derived class Appetiser
 class Appetiser : public Item {
 	friend class Order;
 	private:
@@ -27,6 +30,7 @@ class Appetiser : public Item {
 		bool twoForOne;
 
 	public: 
+		// Set Appetiser Constructor
 		Appetiser(string cal, string apName, string apPrice, string share, string apTwoForOne) {
 			calories = cal;
 			name = apName;
@@ -38,6 +42,7 @@ class Appetiser : public Item {
 		}
 
 		string toString() {
+			// returns item formated for menu with price set to 2 d.p with shareable and two for one formatting
 			string share, two;
 			if (shareable) share = "(shareable) ";
 			if (twoForOne) two = "(2-4-1)";
@@ -47,25 +52,25 @@ class Appetiser : public Item {
 		}
 };
 
+// Define Derived class MainCourse
 class MainCourse : public Item {
 	public:
+		// Set MainCourse Constructor
 		MainCourse(string cal, string apName, string apPrice) {
 			calories = cal;
 			name = apName;
 			price = stod(apPrice);
 		}
-
-		string type() {
-			return "MainCourse";
-		}
 };
 
+// Define Derived class Beverage
 class Beverage : public Item {
 	private:
 		string abv;
 		string volume;
 
 	public:
+		// Set Beverage Constructor
 		Beverage(string cal, string apName, string apPrice, string apAbv, string apVolume) {
 			calories = cal;
 			name = apName;
@@ -75,6 +80,7 @@ class Beverage : public Item {
 		}
 
 		string toString() {
+			// returns item formated for menu with price set to 2 d.p with colume and abv formatting
 			char pricew[8];
 			sprintf(pricew, "%.2f", price);
 			return name + ": £" + pricew + ", " + calories + " cal ("+ volume + "ml, "+ abv + "% abv)";
