@@ -13,26 +13,29 @@ class Order: public ItemList{
 
 		string calculateTotal() {
 			// Calculate discount by iterating through all items in order
-			double discount = 0;
+			vector<double> discount;
 			int twoForOne = 0;
 			for (Item* &item : items) {
 				Appetiser* appetiser = dynamic_cast<Appetiser*>(item); // If appetiser it returns the object if not it returns null
 				if (appetiser && appetiser->twoForOne) { // Check if item is an appetiser and is eligable for twoforone
-					if (twoForOne == 1) {
-						discount += item->price;
-						twoForOne = 0;
-					}
-					else twoForOne++;
+					discount.push_back(item->price);
+					twoForOne++;
 				}
 			}
 			//Apply discount and return formatted response for checkout, basket and order changes
 			string totalText;
-			if (discount > 0) {
+			double calcDiscount = 0;
+			if (discount.size() > 0) {
+				twoForOne = twoForOne / 2; // See how many fit into two
+				std::sort(discount.begin(), discount.end()); // Sort into acending order
+				for (int i = 0; i != twoForOne; i++) {
+					calcDiscount += discount[i]; // Add lowest price to discount
+				}
 				char discountw[8];
-				sprintf(discountw, "%.2f", discount);
+				sprintf(discountw, "%.2f", calcDiscount);
 				totalText = "2-4-1 discount applied! Savings: £" + (string)discountw + "\n";
 			}
-			double endPrice = total - discount; // Deduct discount from total
+			double endPrice = total - calcDiscount; // Deduct discount from total
 			char endPricew[8];
 			sprintf(endPricew, "%.2f", endPrice);
 			totalText += "Total: £" + (string)endPricew + "\n";
