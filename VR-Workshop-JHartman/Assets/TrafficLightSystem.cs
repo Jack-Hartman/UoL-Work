@@ -39,12 +39,19 @@ public class TrafficLightSystem : MonoBehaviour
         t3green = t3.Find("Green light").gameObject;
         t3red = t3.Find("Red light").gameObject;
 
-        t1rc = t1red.GetComponent<Collider>();
-        t2rc = t2red.GetComponent<Collider>();
-        t3rc = t3red.GetComponent<Collider>();
-        t1gc = t1green.GetComponent<Collider>();
-        t2gc = t2green.GetComponent<Collider>();
-        t3gc = t3green.GetComponent<Collider>();
+        GameObject t1redBox = t1.Find("Red Light Box").gameObject;
+        GameObject t1greenBox = t1.Find("Green Light Box").gameObject;
+        GameObject t2redBox = t2.Find("Red Light Box").gameObject;
+        GameObject t2greenBox = t2.Find("Green Light Box").gameObject;
+        GameObject t3redBox = t3.Find("Red Light Box").gameObject;
+        GameObject t3greenBox = t3.Find("Green Light Box").gameObject;
+
+        t1rc = t1redBox.GetComponent<Collider>();
+        t2rc = t2redBox.GetComponent<Collider>();
+        t3rc = t3redBox.GetComponent<Collider>();
+        t1gc = t1greenBox.GetComponent<Collider>();
+        t2gc = t2greenBox.GetComponent<Collider>();
+        t3gc = t3greenBox.GetComponent<Collider>();
 
         stateTimer = 10.0f;
         SetState(1);
