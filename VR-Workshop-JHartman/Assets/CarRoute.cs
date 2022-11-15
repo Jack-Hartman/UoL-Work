@@ -13,6 +13,7 @@ public class CarRoute : MonoBehaviour
     public bool go = false;
     public bool started = false;
     public float initialDelay;
+    public int collisions = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -60,7 +61,7 @@ public class CarRoute : MonoBehaviour
             return;
         }
 
-        if(!stop)
+        if(collisions == 0 && !stop)
         {
             //calculate velocity for this frame
             Vector3 velocity = displacement;
@@ -98,10 +99,13 @@ public class CarRoute : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("Pedestrian") || other.gameObject.CompareTag("Car") || other.gameObject.CompareTag("RedLight"))
+        if(other.gameObject.CompareTag("Pedestrian") || other.gameObject.CompareTag("Car"))
+        {
+            collisions++;
+        }
+        else if (other.gameObject.CompareTag("RedLight"))
         {
             stop = true;
-
         }
         else if(other.gameObject.CompareTag("GreenLight"))
         {
@@ -113,7 +117,7 @@ public class CarRoute : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Pedestrian") || other.gameObject.CompareTag("Car"))
         {
-            stop = false;
+            collisions--;
         }
     }
 }
