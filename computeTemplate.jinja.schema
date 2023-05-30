@@ -1,0 +1,24 @@
+info:
+  title: Compute Template
+  description: Creates a template for a compute instance with a debain 9 image
+  version: 1.0
+
+imports:
+- path: computeTemplate.jinja
+
+required:
+- subnet
+- password
+
+properties:
+  machineType:
+    type: string
+    description: Type of machine for the compute instance to use
+    default: n1-standard-1
+  subnet:
+    type: string
+    description: URL reference to subnet
+  password:
+    type: string
+    description: Password for the disk instance
+    

@@ -1,0 +1,7 @@
+info:
+  title: Network
+  description: Creates a virtual network 
+  version: 1.0
+
+imports:
+- path: network.jinja

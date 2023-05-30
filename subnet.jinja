@@ -1,0 +1,18 @@
+{#
+  subnet.jinja includes:
+  Subnet with ip range
+#}
+
+resources:
+- name: {{ env["name"] }}
+  type: compute.v1.subnetwork  # Sets the instance type to a subnetwork
+  properties:
+    ipCidrRange: {{ properties["ipCidrRange"] }} # Defines the ip range the subnet reserves within the network
+    network: {{ properties["network"] }} # Sets the network to use
+    region: {{ properties["region"] }} # Sets the region for the subnet to be based in
+
+outputs: # Defines outputs to be pass variables outside the jinja file
+- name: selfLink # redefines selfLink
+  value: $(ref.{{ env["name"] }}.selfLink) # Sets selfLink to the subnet URL
+- name: region # defines region
+  value: {{ properties["region"] }} # Sets region to the variable passed

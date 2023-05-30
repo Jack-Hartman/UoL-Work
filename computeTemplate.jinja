@@ -1,0 +1,30 @@
+{#
+  computeTemplate.jinja includes:
+  instance template
+  A disk for the template with a password
+
+  Used to create a reusable template for multiple instance groups
+#}
+
+resources:
+- name: {{ properties["name"] }}-{{ env["deployment"] }}
+  type: compute.v1.instanceTemplate # Sets the resource type to an instance template
+  properties:
+    name: {{ properties["name"] }}-{{ env["deployment"] }}
+    properties:
+      machineType: {{ properties["machineType"] }} # Sets the machineType property to select a predefined specification set by GCP
+      networkInterfaces:
+      - subnetwork: {{ properties["subnet"] }} # Sets the subnet of the compute template to URL of the subnet passed through as a property
+      disks:
+        - type: 'PERSISTENT'
+          sizeGb: 10 # Sets the size of the disk
+          boot: true # Sets the disk to be a boot disk
+          autoDelete: true
+          initializeParams:
+            sourceImage: projects/debian-cloud/global/images/family/debian-9 # Sets the OS image of the instance disk
+          password: {{ properties["password"] }} 
+
+outputs: # Allows variables to be passed out of the jinja file
+- name: resource # Defines the variable resource
+  value: $(ref.{{ properties["name"] }}-{{ env["deployment"] }}.selfLink) # Sets the value of resouce to the selfLink URL
+

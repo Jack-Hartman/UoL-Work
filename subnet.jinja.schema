@@ -1,0 +1,23 @@
+info:
+  title: Sub Network
+  description: Creates a subnet for use with a network
+  version: 1.0
+
+imports:
+- path: subnet.jinja
+
+required:
+- ipCidrRange
+- network
+- region
+
+properties:
+  ipCidrRange:
+    type: string
+    description: The IP range for the subnet to reserve
+  network:
+    type: string
+    description: URL reference to the network to use
+  region:
+    type: string
+    description: Region for the subnet to be based

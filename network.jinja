@@ -1,0 +1,10 @@
+{#
+  network.jinja includes:
+  network instance
+#}
+
+resources:
+- name: {{ env["name"] }}
+  type: compute.v1.network # Sets the instance type to a network
+  properties:
+    autoCreateSubnetworks: false # Disallows the auto creation of subnets

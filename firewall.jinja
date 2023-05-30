@@ -1,0 +1,17 @@
+{#
+    Template from:
+    https://github.com/GoogleCloudPlatform/deploymentmanager-samples/blob/master/google/resource-snippets/compute-v1/firewall.jinja
+
+    firewall.jinja includes:
+    firewall set to allow http and https requests
+#}
+
+resources:
+- name: {{ env["name"]}}-{{env["deployment"]}}
+  type: compute.v1.firewall # Sets the instance type to a firewall
+  properties:
+    network: {{ properties["network"] }} # Sets the network property to the network URL 
+    sourceRanges: ["10.10.0.0/24"] # Sets the firewall to the ip range defined
+    allowed:
+    - IPProtocol: TCP # Allows only the TCP protocol
+      ports: ["80", "443"] # Allows only port 80 and 443

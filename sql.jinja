@@ -1,0 +1,30 @@
+{#
+  Template from:
+  https://github.com/GoogleCloudPlatform/deploymentmanager-samples/blob/master/examples/v2/cloudsql/cloudsql.jinja
+
+  sql.jinja includes:
+  sql instance
+  sql database
+#}
+
+resources:
+- name: {{ env["name"] }}-{{ env["deployment"] }}-master
+  type: sqladmin.v1beta4.instance # Sets the instance type to a sql instance
+  properties:
+    name: {{ env["name"] }}-{{ env["deployment"] }}-{{ env["current_time"] }}-master
+    settings:
+        tier: {{ properties['tier']}} # sets the tier of the instance
+        backupConfiguration:
+          enabled: true # enables backups
+          binaryLogEnabled: true
+
+- name: {{ env["name"] }}-{{ env["deployment"] }}-db
+  type: sqladmin.v1beta4.database # Sets the instance type to a sql database
+  properties:
+    name: {{ properties['database']['name'] }}
+    instance: $(ref.{{ env["name"] }}-{{ env["deployment"] }}-master.name)
+    charset: {{ properties['database']['charset'] }} # sets the database charset to use
+  metadata:
+      dependsOn:
+      - {{ env["name"] }}-{{ env["deployment"] }}-master
+  

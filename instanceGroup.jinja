@@ -1,0 +1,54 @@
+{#
+    Template from
+    https://github.com/GoogleCloudPlatform/deploymentmanager-samples/blob/master/examples/v2/nodejs_l7/jinja/autoscaled_group.jinja
+
+    instanceGroup.jinja includes:
+    instance group
+    auto scaler (used to automatically scale the amount of instances to meet demand)
+    load balancer (used to share the load between avaliable instances)
+    health checker (used to check the health of the instances)
+#}
+
+resources:
+  - name: {{ env["deployment"] }}-http-hc
+    type: compute.v1.httpHealthChecks # Sets the instance type to a httpHealthChecker
+    properties:
+      host: localhost 
+      port: 80 
+      requestPath: /
+      timeoutSec: 3
+      checkIntervalSec: 3
+      unhealthyThreshold: 5
+      healthyThreshold: 2
+      description: {{ properties["region"] }}-igm-hc
+
+  - name: {{ env["name"] }}-rigm
+    type: compute.v1.regionInstanceGroupManager  # Sets the instance type to a regional group manager
+    properties:
+      region: {{ properties["region"] }}
+      targetSize: {{ properties["group"]["size"] }} # Sets the target size of the instance group (will attempt to create x amount instances)
+      instanceTemplate: {{ properties["group"]["instanceTemplate"] }} # Sets the instance template that the instance group will use 
+
+  - name: {{ env["name"] }}-ras
+    type: compute.v1.regionAutoscalers # Sets the instance type to a regional auto scaler
+    properties:
+      region: {{ properties["region"] }}
+      target: $(ref.{{ env["name"] }}-rigm.selfLink) # Sets the target of the auto scaler to the instance group
+      autoscalingPolicy:
+        maxNumReplicas: {{ properties["scaler"]["maxSize"] }} # Sets the auto scaler to have a max number of instances it can create
+    metadata:
+      dependsOn:
+      - {{ env["name"] }}-rigm
+
+  - type: compute.v1.backendServices # Sets the instance type to a backend service
+    name: bs-{{ env["deployment"] }}
+    properties:
+      healthChecks:
+        - $(ref.{{ env["deployment"] }}-http-hc.selfLink) # Sets the health check link of the back end service to the URL of the health check instance
+      port: 80
+      portName: http
+      protocol: HTTP
+      timeoutSec: 30
+    metadata:
+      dependsOn:
+      - {{ env["deployment"] }}-http-hc

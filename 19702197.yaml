@@ -1,0 +1,83 @@
+# Jack Hartman 19702197
+# Assignment 1 Cloud Computing
+# 'jh' is used as a template and can be replaced with the name of the company
+
+imports: # Imports all jinja files for use throughout the yaml file
+- path: network.jinja
+- path: subnet.jinja
+- path: instanceGroup.jinja
+- path: firewall.jinja
+- path: sql.jinja
+- path: bucket.jinja
+- path: computeTemplate.jinja
+
+resources: 
+# Main Network
+- name: jh-net # Sets name for current instance
+  type: network.jinja # Sets the imported jinja file to use as type
+
+# Firewall
+- name: jh-firewall 
+  type: firewall.jinja 
+  properties: # Properties to passed to the jinja file
+    network: $(ref.jh-net.selfLink) # Gets URL to main network to pass as property 'network'
+  metadata:
+    dependsOn: # Sets metadata to depend on a resource
+    - jh-net
+
+# Subnet 
+- name: jh-subnet-a # Sub-net EU West2
+  type: subnet.jinja
+  properties:
+    ipCidrRange: 10.10.0.0/24 # Ip range to pass through as a property 
+    network: $(ref.jh-net.selfLink)
+    region: europe-west2 # Region for subnet to use
+  metadata:
+    dependsOn:
+    - jh-net
+
+# Compute template
+- name: jh-compute-template
+  type: computeTemplate.jinja
+  properties:
+    name: jh-compute-template
+    subnet: $(ref.jh-subnet-a.selfLink) # Gets URL to sub network to pass as property 'subnet'
+    machineType: n1-standard-1 # Machine type to use 
+    password: pass123 
+    zone: $(ref.jh-subnet-a.region) # Gets region output from subnet
+  metadata:
+    dependsOn:
+    - jh-subnet-a
+
+# Instance Group
+- name: jh-compute-group
+  type: instanceGroup.jinja
+  properties:
+    region: $(ref.jh-subnet-a.region)
+    group: # Properties Object
+      size: 2 # Passes 2 as group size
+      instanceTemplate: $(ref.jh-compute-template.resource)  # Gets URL to compute template to pass as property 'instanceTemplate' (resource is a selfLink output)
+    scaler:
+      maxSize: 4
+  metadata:
+    dependsOn:
+    - jh-subnet-a
+    - jh-compute-template
+
+# SQL Instance
+- name: jh-sql
+  type: sql.jinja
+  properties:
+    tier: db-g1-small # Passes tier to jinja file
+    zone: $(ref.jh-subnet-a.region)-a
+    database:
+      name: jh-db # Passes database name to jinja file
+      charset: utf8mb4 # Passes database charset to jinja file
+    subnet: $(ref.jh-subnet-a.selfLink)
+  metadata:
+    dependsOn:
+     - jh-subnet-a
+
+# Bucket
+- name: jh-cdn-bucket
+  type: bucket.jinja 

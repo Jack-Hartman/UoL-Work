@@ -1,0 +1,15 @@
+{#
+  bucket.jinja includes:
+  Bucket storage
+
+  Bucket storage which can be used as a form of content delivery network
+#}
+
+resources:
+- type: storage.v1.bucket # Sets the resource type to a bucket
+  name: {{ env["name"] }}-{{ env["deployment"] }} # Sets the name to the current instance name and environment deployment name 
+  properties:
+    name: {{ env["name"] }}-{{ env["deployment"] }}-{{ env["current_time"] }} # Sets the name of the bucket to the current instance name, environment deployment name and current UTC name to be unique
+    projection: full # Sets projection property of the bucket instance
+    location: EU # Sets location property of the bucket instance
+    storageClass: STANDARD # Sets storageClass property of the bucket instance

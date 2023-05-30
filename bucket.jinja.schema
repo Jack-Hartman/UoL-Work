@@ -1,0 +1,7 @@
+info:
+  title: Bucket
+  description: Creates a new bucket instance
+  version: 1.0
+
+imports:
+- path: bucket.jinja

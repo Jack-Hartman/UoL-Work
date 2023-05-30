@@ -1,0 +1,37 @@
+info:
+  title: Instance Group
+  description: Creates a regional instance group with an auto scaler, health check and load balancer
+  version: 1.0
+
+imports:
+- path: instanceGroup.jinja
+
+required:
+- subnet
+- region
+- password
+
+properties:
+  network:
+    type: string
+    description: Name for the bucket
+  group:
+    type: object
+    required:
+    - size
+    - instanceTemplate
+    properties:
+        size:
+            type: integer
+            description: Initial size of the instance group
+        instanceTemplate:
+            type: string
+            description: URL reference to the instance Template to use
+  scaler:
+    type: object
+    required:
+    - maxSize
+    properties:
+        maxSize:
+            type: integer
+            description: Max size of the instance group

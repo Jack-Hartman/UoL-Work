@@ -1,0 +1,15 @@
+info:
+  title: Firewall
+  description: Creates a firewall for use with a subnet
+  version: 1.0
+
+imports:
+- path: firewall.jinja
+
+required:
+- network
+
+properties:
+  network:
+    type: string
+    description: URL reference to the network to link the firewall to

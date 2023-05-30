@@ -1,0 +1,27 @@
+info:
+  title: SQL Instance
+  description: Creates a sql instance and sql database
+  version: 1.0
+
+imports:
+- path: sql.jinja
+
+required:
+- tier
+
+properties:
+  tier:
+    type: string
+    description: The instance tier to use
+  database:
+    type: object
+    required:
+    - name
+    - charset
+    properties:
+        name:
+            type: string
+            description: Name for the database
+        charset:
+            type: string
+            description: Charset for the database to use
