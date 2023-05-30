@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848409ee8ba454f42a5ddff137688a27, type: 3}
+  m_Name: ReferenceImageLibrary
+  m_EditorClassIdentifier: 
+  m_GuidLow: 5406569900834369612
+  m_GuidHigh: 4697778183065360783
+  m_DataStore:
+    m_Storage: []
+  m_Images:
+  - m_SerializedGuid:
+      m_GuidLow: 4729415879629568312
+      m_GuidHigh: 2371128533628288445
+    m_SerializedTextureGuid:
+      m_GuidLow: 9210991592201102352
+      m_GuidHigh: 14105206811102552136
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: Numbers Card
+    m_Texture: {fileID: 0}
+  - m_SerializedGuid:
+      m_GuidLow: 5124784006242248619
+      m_GuidHigh: 7440773334604583329
+    m_SerializedTextureGuid:
+      m_GuidLow: 6491056107384255493
+      m_GuidHigh: 3314681382987465946
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: Equals Card
+    m_Texture: {fileID: 0}
+  - m_SerializedGuid:
+      m_GuidLow: 5620315707814583562
+      m_GuidHigh: 10369876884217177512
+    m_SerializedTextureGuid:
+      m_GuidLow: 13426509734343099969
+      m_GuidHigh: 5965984325199291771
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: Operators Card
+    m_Texture: {fileID: 0}
